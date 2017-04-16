@@ -1,0 +1,135 @@
+﻿<div class="row">
+    <div class="col-md-12">
+        <div class="well">
+            <p>Welcome to HMDB - Hasura Music Database</p>
+            <p>Checkout out these APIs built over the MusicBrainz dataset, access them using the API token given below and build your own music application.</p>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <span style="font-weight:bold">Your API token:</span> {{ vm.authToken }}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+            <h2>Search artist</h2>
+            <p>This is an API request for searching for an artist. It uses the <strong>$ilike</strong> operator. It is limited to 10 results. See the list of supported operators <a href="https://hasura.io/_docs/platform/0.6/ref/data/reference.html#operator" target="_blank">here.</a></p>
+        <pre class="input">{{vm.searchArtistQuery | json}} </pre>
+    </div>
+    <div class="col-md-12 output" ng-if="vm.searchData">
+      <pre class="output">{{ vm.searchData | json }}</pre>
+    </div>
+    <div class="col-md-12">
+        <btn clipboard supported="supported" text="vm.searchArtistCurl" type="button" class="btn btn-primary"> Copy to Clipboard</btn>
+        <btn type="button" class="btn btn-info" ng-click="vm.searchArtist()"> Try it Out</btn>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+            <h2>Get artist</h2>
+            <p>This is an API request for getting details of an artist: artist info, artist type and released albums (ordered by release date). It uses relationship syntax to query for related tables. Read more about relationships <a href="https://hasura.io/_docs/platform/0.6/ref/data/query/relationship.html" target="_blank">here.</a></p>
+        <pre class="input">{{ vm.getArtistQuery | json }}</pre>
+    </div>
+    <div class="col-md-12 output" ng-if="vm.artistData">
+      <pre class="output">{{ vm.artistData | json }}</pre>
+    </div>
+    <div class="col-md-12">
+        <btn clipboard supported="supported" text="vm.getArtistCurl" type="button" class="btn btn-primary"> Copy to Clipboard</btn>
+        <btn type="button" class="btn btn-info" ng-click="vm.getArtist()"> Try it Out</btn>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <h2>Get Tags</h2>
+        <p> This is an API request for getting the list of popular tags (or categories). Popular tags are defined by the number of reference counts in the <strong>tags</strong> table. It is limited to 100 results;
+        </p>
+        <pre class="input"> {{ vm.tagsQuery | json}}</pre>
+    </div>
+    <div class="col-md-12" ng-if="vm.tagsData">
+      <pre class="output">{{ vm.tagsData | json }}</pre>
+    </div>
+    <div class="col-md-12">
+        <btn clipboard supported="supported" text="vm.tagsCurl" type="button" class="btn btn-primary"> Copy to Clipboard</btn>
+        <btn type="button" class="btn btn-info" ng-click="vm.getPopularTags()"> Try it Out</btn>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <h2>Dig into tag</h2>
+        <p>This is an API request for getting artists and events with a particular tag. Hasura supports bulk queries in a single HTTP request. Here, we are fetching from two tables: artist_tag and event_tag.
+        </p>
+        <pre class="input"> {{vm.tagDetailQuery | json }}</pre>
+    </div>
+    <div class="col-md-12" ng-if="vm.tagDetailsData">
+      <pre class="output">{{ vm.tagDetailsData | json }}</pre>
+    </div>
+    <div class="col-md-12">
+        <btn clipboard supported="supported" text="vm.tagDetailCurl" type="button" class="btn btn-primary"> Copy to Clipboard</btn>
+        <btn type="button" class="btn btn-info" ng-click="vm.getTagDetails()"> Try it Out</btn>
+    </div>
+    </div>
+</div>
+
+<!-- <div class="row">
+        <div class="col-md-12">
+            <h2>Get latest releases</h2>
+            <p>This is an API request to fetch the latest albums. It is limited to 10 results.</p>
+            <p>Hasura supports arbitrary nesting of relationships. Here, we show an example implementation of pagination which is a 3-way join.</p>
+            <p>Also, note the "where" clause for filtering based on arbitrary-depth relationships</p>
+            <pre class="input">
+"type": "select",
+"args": {
+"table": "release_group_meta",
+"columns": [
+"id",
+"first_release_date_year",
+"first_release_date_month",
+"first_release_date_day",
+{
+  "name": "parent",
+  "columns": [
+    "name",
+    "artist_credit",
+    { "name" : "artist",
+      "columns": ["id", "name"]
+    }]
+}
+],
+"order_by": [{"column" : "first_release_date_year", "type": "desc", "nulls": "last"},
+           {"column" : "first_release_date_month", "type": "desc", "nulls": "last"},
+           {"column" : "first_release_date_day", "type": "desc", "nulls": "last"}
+          ],
+"where": { "parent": { "artist": { "name" : { "$neq" : null  } } } },
+"limit": 10,
+"offset": offset
+            </pre>
+    </div>
+    <div class="col-md-12" ng-if="vm.releasesData">
+      <pre class="output">{{ vm.releasesData | json }}</pre>
+    </div>
+    <div class="col-md-12">
+        <btn type="button" class="btn btn-primary"> Copy to Clipboard</btn>
+        <btn type="button" class="btn btn-info" ng-click="vm.getLatestReleases(0)"> Try it Out</btn>
+    </div>
+</div>
+ -->
+ <div class="row">
+    <div class="col-md-12">
+        <h2>Analytics</h2>
+        <p>This is an API request for analysing the trend of number of album releases in different genres with respect to time. Since this is a complex SQL query, we have leveraged the power of views. Here, we have created a view by joining three tables: tag, release_group_tag, release_group_meta and grouping them over year.</p>
+        <pre class="input"> {{vm.analyticsQuery | json }}</pre>
+    </div>
+    <div class="col-md-12" ng-if="vm.analyticsData">
+      <pre class="output">{{ vm.analyticsData | json }}</pre>
+    </div>
+    <div class="col-md-12">
+        <btn clipboard supported="supported" text="vm.analyticsCurl" type="button" class="btn btn-primary"> Copy to Clipboard</btn>
+        <btn type="button" class="btn btn-info" ng-click="vm.getAnalytics()"> Try it Out</btn>
+    </div>
+</div>

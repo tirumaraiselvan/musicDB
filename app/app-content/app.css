@@ -1,0 +1,13 @@
+﻿a {
+    cursor: pointer;
+}
+
+.output {
+    max-height: 200px;
+    overflow: auto;
+}
+
+.input {
+    max-height: 200px;
+    overflow: auto;
+}
